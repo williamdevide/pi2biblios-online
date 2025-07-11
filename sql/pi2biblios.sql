@@ -7,7 +7,7 @@
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+--SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -29,17 +29,19 @@ USE `pi2biblios`;
 -- Estrutura para tabela `emprestimo`
 --
 
-CREATE TABLE `emprestimo` (
-  `id_emprestimo` int(11) NOT NULL,
-  `id_pessoa` int(11) NOT NULL,
-  `id_livro` int(11) NOT NULL,
-  `data_emprestimo` date NOT NULL,
-  `data_prevista_entrega` date NOT NULL,
-  `data_efetiva_entrega` date DEFAULT NULL,
-  `status_entrega` varchar(20) NOT NULL,
-  `obs_emprestimo` text DEFAULT NULL,
-  `obs_devolucao` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE emprestimo (
+  id_emprestimo SERIAL PRIMARY KEY,
+  id_pessoa INT NOT NULL,
+  id_livro INT NOT NULL,
+  data_emprestimo DATE NOT NULL,
+  data_prevista_entrega DATE NOT NULL,
+  data_efetiva_entrega DATE,
+  status_entrega VARCHAR(20) NOT NULL,
+  obs_emprestimo TEXT,
+  obs_devolucao TEXT,
+  CONSTRAINT fk_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa(id_pessoa),
+  CONSTRAINT fk_livro FOREIGN KEY (id_livro) REFERENCES livro(id_livro)
+);
 
 --
 -- Despejando dados para a tabela `emprestimo`
@@ -65,14 +67,14 @@ INSERT INTO `emprestimo` (`id_emprestimo`, `id_pessoa`, `id_livro`, `data_empres
 -- Estrutura para tabela `livro`
 --
 
-CREATE TABLE `livro` (
-  `id_livro` int(11) NOT NULL,
-  `nome_livro` varchar(150) NOT NULL,
-  `autor_livro` varchar(100) NOT NULL,
-  `categoria_livro` varchar(50) NOT NULL,
-  `img_livro` mediumblob DEFAULT NULL,
-  `ativo_livro` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE livro (
+  id_livro SERIAL PRIMARY KEY,
+  nome_livro VARCHAR(150) NOT NULL,
+  autor_livro VARCHAR(100) NOT NULL,
+  categoria_livro VARCHAR(50) NOT NULL,
+  img_livro BYTEA NULL,
+  ativo_livro BOOLEAN DEFAULT TRUE
+);
 
 --
 -- Despejando dados para a tabela `livro`
@@ -117,15 +119,15 @@ INSERT INTO `livro` (`id_livro`, `nome_livro`, `autor_livro`, `categoria_livro`,
 -- Estrutura para tabela `pessoa`
 --
 
-CREATE TABLE `pessoa` (
-  `id_pessoa` int(11) NOT NULL,
-  `nome_pessoa` varchar(100) NOT NULL,
-  `email_pessoa` varchar(100) NOT NULL,
-  `telefone_pessoa` varchar(20) NOT NULL,
-  `nasc_pessoa` date NOT NULL,
-  `img_pessoa` mediumblob DEFAULT NULL,
-  `ativo_pessoa` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE pessoa (
+  id_pessoa SERIAL PRIMARY KEY,
+  nome_pessoa VARCHAR(100) NOT NULL,
+  email_pessoa VARCHAR(100) NOT NULL UNIQUE,
+  telefone_pessoa VARCHAR(20) NOT NULL,
+  nasc_pessoa DATE NOT NULL,
+  img_pessoa BYTEA NULL,
+  ativo_pessoa BOOLEAN DEFAULT TRUE
+);
 
 --
 -- Despejando dados para a tabela `pessoa`

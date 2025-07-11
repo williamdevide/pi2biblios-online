@@ -1,3 +1,6 @@
+# 1. Arquivo: Dockerfile (ATUALIZADO)
+#    (O nome do artefato .war foi corrigido para corresponder ao pom.xml)
+
 # Estágio 1: Build da Aplicação com Maven
 # Usamos uma imagem oficial do Maven com Java 21 para compilar nosso projeto.
 FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
@@ -25,7 +28,8 @@ FROM tomcat:10.1-jdk21-temurin
 RUN rm -rf /usr/local/tomcat/webapps/*
 
 # Copia o arquivo .war que foi gerado no estágio de build para a pasta de deploy do Tomcat.
-# O Tomcat irá automaticamente "descompactar" e executar nossa aplicação.
+# O nome do artefato deve corresponder ao <finalName> no pom.xml.
+# Ao nomear o ficheiro como ROOT.war, a aplicação responderá na URL raiz.
 COPY --from=builder /app/target/pi2biblios.war /usr/local/tomcat/webapps/ROOT.war
 
 # Expõe a porta 8080, que é a porta padrão do Tomcat.
