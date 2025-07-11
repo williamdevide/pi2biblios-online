@@ -1,0 +1,11 @@
+br\com\biblios\dao\PessoaDAO.class
+br\com\biblios\controller\LivroServlet.class
+br\com\biblios\model\Livro.class
+br\com\biblios\model\Pessoa.class
+br\com\biblios\util\ConnectionFactory.class
+br\com\biblios\controller\EmprestimoServlet.class
+br\com\biblios\util\EncodingFilter.class
+br\com\biblios\dao\EmprestimoDAO.class
+br\com\biblios\dao\LivroDAO.class
+br\com\biblios\model\Emprestimo.class
+br\com\biblios\controller\PessoaServlet.class
