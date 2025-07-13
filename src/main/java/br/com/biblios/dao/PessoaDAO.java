@@ -66,9 +66,9 @@ public class PessoaDAO {
         Pessoa pessoa = null;
         final String sql = "SELECT p.*, " +
                 "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NOT NULL THEN 1 ELSE 0 END), 0) AS concluidos, " +
-                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega >= CURDATE() THEN 1 ELSE 0 END), 0) AS em_dia, "
+                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega >= CURRENT_DATE THEN 1 ELSE 0 END), 0) AS em_dia, "
                 +
-                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega < CURDATE() THEN 1 ELSE 0 END), 0) AS atrasados "
+                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega < CURRENT_DATE THEN 1 ELSE 0 END), 0) AS atrasados "
                 +
                 "FROM pessoa p " +
                 "LEFT JOIN emprestimo e ON p.id_pessoa = e.id_pessoa " +
@@ -156,9 +156,9 @@ public class PessoaDAO {
         // O SQL usa LIKE com '%' para buscar nomes que contenham o texto digitado
         final String sql = "SELECT p.*, " +
                 "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NOT NULL THEN 1 ELSE 0 END), 0) AS concluidos, " +
-                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega >= CURDATE() THEN 1 ELSE 0 END), 0) AS em_dia, "
+                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega >= CURRENT_DATE THEN 1 ELSE 0 END), 0) AS em_dia, "
                 +
-                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega < CURDATE() THEN 1 ELSE 0 END), 0) AS atrasados "
+                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega < CURRENT_DATE THEN 1 ELSE 0 END), 0) AS atrasados "
                 +
                 "FROM pessoa p " +
                 "LEFT JOIN emprestimo e ON p.id_pessoa = e.id_pessoa " +

@@ -49,8 +49,8 @@ public class EmprestimoDAO {
 
         switch (filtro) {
             case "abertos": sql += "WHERE emp.data_efetiva_entrega IS NULL "; break;
-            case "atrasados": sql += "WHERE emp.data_efetiva_entrega IS NULL AND emp.data_prevista_entrega < CURDATE() "; break;
-            case "em_dia": sql += "WHERE emp.data_efetiva_entrega IS NULL AND emp.data_prevista_entrega >= CURDATE() "; break;
+            case "atrasados": sql += "WHERE emp.data_efetiva_entrega IS NULL AND emp.data_prevista_entrega < CURRENT_DATE "; break;
+            case "em_dia": sql += "WHERE emp.data_efetiva_entrega IS NULL AND emp.data_prevista_entrega >= CURRENT_DATE "; break;
             case "finalizados": sql += "WHERE emp.data_efetiva_entrega IS NOT NULL "; break;
         }
         sql += orderByClause;

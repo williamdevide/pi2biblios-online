@@ -65,7 +65,7 @@ public class LivroDAO {
         final String sql = "SELECT l.*, " +
                         "CASE " +
                         "    WHEN e.id_emprestimo IS NULL THEN 'Disponível' " +
-                        "    WHEN e.data_prevista_entrega >= CURDATE() THEN 'Emprestado (Em dia)' " +
+                        "    WHEN e.data_prevista_entrega >= CURRENT_DATE THEN 'Emprestado (Em dia)' " +
                         "    ELSE 'Emprestado (Atrasado)' " +
                         "END AS status_emprestimo " +
                         "FROM livro l " +
@@ -104,7 +104,7 @@ public class LivroDAO {
         final String sql = "SELECT l.*, " +
                            "CASE " +
                            "    WHEN e.id_emprestimo IS NULL THEN 'Disponível' " +
-                           "    WHEN e.data_prevista_entrega >= CURDATE() THEN 'Emprestado (Em dia)' " +
+                           "    WHEN e.data_prevista_entrega >= CURRENT_DATE THEN 'Emprestado (Em dia)' " +
                            "    ELSE 'Emprestado (Atrasado)' " +
                            "END AS status_emprestimo " +
                            "FROM livro l " +
