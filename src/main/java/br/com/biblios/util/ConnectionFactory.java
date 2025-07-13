@@ -11,10 +11,12 @@ public class ConnectionFactory {
             Class.forName("org.postgresql.Driver");
 
             // Lê as informações de conexão das variáveis de ambiente
-            String dbUrl = System.getenv("DB_URL"); // Será jdbc:postgresql://...
-            String dbUser = System.getenv("DB_USER");
-            String dbPassword = System.getenv("DB_PASSWORD");
-
+            //String dbUrl = System.getenv("DB_URL"); // Será jdbc:postgresql://...
+            //String dbUser = System.getenv("DB_USER");
+            //String dbPassword = System.getenv("DB_PASSWORD");
+            String dbUrl = "jdbc:postgresql://dpg-d1omqtur433s73ciot5g-a.oregon-postgres.render.com:5432/pi2biblios_ea33";
+            String dbUser = "pi2biblios_ea33_user";
+            String dbPassword = "iYmru9abY7fWMPF5afGPW2Xlcsyb2AWx";
             // Verifica se as variáveis foram configuradas no ambiente de deploy
             if (dbUrl == null || dbUser == null || dbPassword == null) {
                 // Se não estiverem, usa a configuração local para desenvolvimento

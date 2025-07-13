@@ -85,11 +85,11 @@ public class EmprestimoDAO {
     }
 
     public void devolver(int idEmprestimo, String obsDevolucao) {
-        String sql = "UPDATE emprestimo SET data_efetiva_entrega = CURDATE(), status_entrega = 'Finalizado', obs_devolucao = ? WHERE id_emprestimo = ?";
+        String sql = "UPDATE emprestimo SET data_efetiva_entrega = CURRENT_DATE, status_entrega = 'Finalizado', obs_devolucao = ? WHERE id_emprestimo = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obsDevolucao);
-               stmt.setInt(2, idEmprestimo);
+            stmt.setInt(2, idEmprestimo);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao devolver livro: ", e);

@@ -20,12 +20,8 @@ public class LivroDAO {
         
         String whereClause = "";
         switch (filtroStatus) {
-            case "ativos":
-                whereClause = "WHERE l.ativo_livro = TRUE ";
-                break;
-            case "inativos":
-                whereClause = "WHERE l.ativo_livro = FALSE ";
-                break;
+            case "ativos": whereClause = "WHERE l.ativo_livro = TRUE "; break;
+            case "inativos": whereClause = "WHERE l.ativo_livro = FALSE "; break;
         }
 
         String orderByClause = " ORDER BY " +
@@ -33,17 +29,17 @@ public class LivroDAO {
             ("desc".equalsIgnoreCase(sortDir) ? "DESC" : "ASC");
             
         final String sql = "SELECT l.*, " +
-                       "CASE " +
+                       "MAX(CASE " +
                        "    WHEN e.id_emprestimo IS NULL THEN 'Disponível' " +
-                       "    WHEN e.data_prevista_entrega >= CURDATE() THEN 'Emprestado (Em dia)' " +
+                       "    WHEN e.data_prevista_entrega >= CURRENT_DATE THEN 'Emprestado (Em dia)' " +
                        "    ELSE 'Emprestado (Atrasado)' " +
-                       "END AS status_emprestimo " +
+                       "END) AS status_emprestimo " +
                        "FROM livro l " +
                        "LEFT JOIN emprestimo e ON l.id_livro = e.id_livro AND e.data_efetiva_entrega IS NULL " +
                        whereClause + 
                        "GROUP BY l.id_livro, l.nome_livro, l.autor_livro, l.categoria_livro, l.ativo_livro, l.img_livro " +
                        orderByClause;
-    
+
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

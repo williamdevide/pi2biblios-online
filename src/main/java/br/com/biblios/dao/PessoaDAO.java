@@ -15,41 +15,32 @@ public class PessoaDAO {
             "id_pessoa", "nome_pessoa", "email_pessoa", "telefone_pessoa", "nasc_pessoa");
 
     // Método para listar todas as pessoas ativas
-    public List<Pessoa> listarTodos(String filtroStatus, String sortField, String sortDir) {
+     public List<Pessoa> listarTodos(String filtroStatus, String sortField, String sortDir) {
         List<Pessoa> pessoas = new ArrayList<>();
-        // Validação e construção da cláusula ORDER BY
+        
         String whereClause = "";
         switch (filtroStatus) {
-            case "ativos":
-                whereClause = "WHERE p.ativo_pessoa = TRUE ";
-                break;
-            case "inativos":
-                whereClause = "WHERE p.ativo_pessoa = FALSE ";
-                break;
-            // "todos" não precisa de WHERE
+            case "ativos": whereClause = "WHERE p.ativo_pessoa = TRUE "; break;
+            case "inativos": whereClause = "WHERE p.ativo_pessoa = FALSE "; break;
         }
 
         String orderByClause = " ORDER BY " +
-                (COLUNAS_PERMITIDAS.contains(sortField) ? sortField : "id_pessoa") + " " +
-                ("desc".equalsIgnoreCase(sortDir) ? "DESC" : "ASC");
+            (COLUNAS_PERMITIDAS.contains(sortField) ? sortField : "id_pessoa") + " " +
+            ("desc".equalsIgnoreCase(sortDir) ? "DESC" : "ASC");
 
         final String sql = "SELECT p.*, " +
-                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NOT NULL THEN 1 ELSE 0 END), 0) AS concluidos, " +
-                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega >= CURDATE() THEN 1 ELSE 0 END), 0) AS em_dia, "
-                +
-                "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega < CURDATE() THEN 1 ELSE 0 END), 0) AS atrasados "
-                +
-                "FROM pessoa p " +
-                "LEFT JOIN emprestimo e ON p.id_pessoa = e.id_pessoa " +
-                whereClause + // Adiciona o filtro dinâmico aqui
-                "GROUP BY p.id_pessoa, p.nome_pessoa, p.email_pessoa, p.telefone_pessoa, p.nasc_pessoa, p.ativo_pessoa, p.img_pessoa"
-                +
-                orderByClause;
+                       "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NOT NULL THEN 1 ELSE 0 END), 0) AS concluidos, " +
+                       "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega >= CURRENT_DATE THEN 1 ELSE 0 END), 0) AS em_dia, " +
+                       "COALESCE(SUM(CASE WHEN e.data_efetiva_entrega IS NULL AND e.data_prevista_entrega < CURRENT_DATE THEN 1 ELSE 0 END), 0) AS atrasados " +
+                       "FROM pessoa p " +
+                       "LEFT JOIN emprestimo e ON p.id_pessoa = e.id_pessoa " +
+                       whereClause +
+                       "GROUP BY p.id_pessoa, p.nome_pessoa, p.email_pessoa, p.telefone_pessoa, p.nasc_pessoa, p.ativo_pessoa, p.img_pessoa" +
+                       orderByClause;
 
         try (Connection conn = ConnectionFactory.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
-
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Pessoa pessoa = new Pessoa();
                 pessoa.setId(rs.getInt("id_pessoa"));
@@ -57,8 +48,8 @@ public class PessoaDAO {
                 pessoa.setEmail(rs.getString("email_pessoa"));
                 pessoa.setTelefone(rs.getString("telefone_pessoa"));
                 pessoa.setDataNascimento(rs.getDate("nasc_pessoa"));
-                pessoa.setImgPessoa(rs.getBytes("img_pessoa"));
                 pessoa.setAtivo(rs.getBoolean("ativo_pessoa"));
+                pessoa.setImgPessoa(rs.getBytes("img_pessoa"));
                 pessoa.setEmprestimosConcluidos(rs.getInt("concluidos"));
                 pessoa.setEmprestimosEmDia(rs.getInt("em_dia"));
                 pessoa.setEmprestimosAtrasados(rs.getInt("atrasados"));
